@@ -1,6 +1,6 @@
 class WatchesController < ApplicationController
   before_action :set_watch, only: %i[ show update destroy ]
-
+  before_action :authenticate_user!
   # GET /watches
   def index
     @watches = Watch.all

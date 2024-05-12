@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // If your test runner supports line numbers, such as in Rails,
+    // you can add a task like this one to run only the test under the cursor
+        {
+            "name": "Minitest - current line",
+            "type": "rdbg",
+            "request": "launch",
+            "command": "${workspaceRoot}/bin/rails",
+            "script": "test",
+            "args": ["server",
+            "-p",
+            "3000"],
+            "askParameters": false
+        },
+        {
+            "type": "rdbg",
+            "name": "Attach with rdbg",
+            "request": "attach"
+        }
+    ]
+}
