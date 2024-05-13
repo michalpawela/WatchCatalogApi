@@ -9,11 +9,30 @@ class WatchesController < ApplicationController
     price_gte = params[:price_gte]
     price_lte = params[:price_lte]
     name = params[:name]
+    sort_by = params[:sort_by]
+    sort_order = params[:sort_order]
 
     @watches = @watches.where(category: category) if category.present?
-    @watches = @watches.where('price >= ?', price_gte.to_f) if price_gte.present?
-    @watches = @watches.where('price <= ?', price_lte.to_f) if price_lte.present?
+    @watches = @watches.where('price >= ?', price_gte) if price_gte.present?
+    @watches = @watches.where('price <= ?', price_lte) if price_lte.present?
     @watches = @watches.where("name like ?", "%#{name}%") if name.present?
+
+
+    if sort_by.present? && sort_by.is_a?(Array)
+      sort_columns = sort_by
+      sort_columns.each_with_index do |column|
+        @watches = @watches.sort_by do |watch|
+          if column == 'name' || column == 'category'
+            watch[column]
+          else
+            watch[column].to_f
+          end
+        end
+      end
+      if sort_order.present? && sort_order.downcase == "desc"
+        @watches = @watches.reverse
+      end
+    end
 
     render json: @watches
   end
