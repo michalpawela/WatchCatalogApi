@@ -5,6 +5,15 @@ class WatchesController < ApplicationController
   # GET /watches
   def index
     @watches = Watch.all
+    category = params[:category]
+    price_gte = params[:price_gte]
+    price_lte = params[:price_lte]
+    name = params[:name]
+
+    @watches = @watches.where(category: category) if category.present?
+    @watches = @watches.where('price >= ?', price_gte.to_f) if price_gte.present?
+    @watches = @watches.where('price <= ?', price_lte.to_f) if price_lte.present?
+    @watches = @watches.where("name like ?", "%#{name}%") if name.present?
 
     render json: @watches
   end
