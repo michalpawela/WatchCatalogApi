@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Users::RegistrationsController, type: :request do
   describe 'POST /signup' do
+    let(:user) {create(:user)}
     scenario 'valid user attributes' do
       post user_registration_path, params: {
         user: {
-          email: 'test@test.com',
+          email: 'test2@test.com',
           password: 'password',
           name: 'joe'
         }
@@ -27,6 +28,30 @@ RSpec.describe Users::SessionsController, type: :request do
           email: 'john.doe@example.com',
           password: 'password',
         }
+      }
+
+      # Add assertions here, for example:
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include('application/json')
+    end
+  end
+  describe 'DELETE /logout' do
+    scenario 'valid user attributes' do
+      user = User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password')
+      post user_session_path, params: {
+        user: {
+          email: 'john.doe@example.com',
+          password: 'password',
+        }
+      }
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include('application/json')
+
+      json_response = response.header['authorization']
+
+
+      delete user_session_path, headers: {
+        authorization: json_response
       }
 
       # Add assertions here, for example:
